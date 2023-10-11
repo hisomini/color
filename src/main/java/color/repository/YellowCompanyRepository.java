@@ -2,6 +2,7 @@ package color.repository;
 
 import color.domain.YellowCompany;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -21,7 +22,10 @@ public class YellowCompanyRepository {
         return manager.find(YellowCompany.class, id);
     }
 
-    public List<YellowCompany> list() {
-        return manager.createQuery("select company from YellowCompany company", YellowCompany.class).getResultList();
+    public List<YellowCompany> list(int offset, int limit) {
+        return manager.createQuery("select company from YellowCompany company where company.is_active=true", YellowCompany.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 }

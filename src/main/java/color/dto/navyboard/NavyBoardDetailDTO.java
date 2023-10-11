@@ -1,4 +1,6 @@
-package color.dto;
+package color.dto.navyboard;
 
 public class NavyBoardDetailDTO {
+
+
 }

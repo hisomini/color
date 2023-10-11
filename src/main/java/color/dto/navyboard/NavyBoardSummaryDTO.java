@@ -1,4 +1,4 @@
-package color.dto;
+package color.dto.navyboard;
 
 import org.springframework.lang.Nullable;
 import java.time.LocalDateTime;

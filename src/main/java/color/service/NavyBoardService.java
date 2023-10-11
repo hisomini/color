@@ -2,7 +2,7 @@ package color.service;
 
 import color.domain.NavyBoard;
 import color.domain.WhiteUser;
-import color.dto.NavyBoardSummaryDTO;
+import color.dto.navyboard.NavyBoardSummaryDTO;
 import color.repository.NavyBoardRepository;
 import color.repository.WhiteUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ public class NavyBoardService {
     private final NavyBoardRepository boardRepository;
     private final WhiteUserRepository userRepository;
 
-    public List<NavyBoardSummaryDTO> list() {
-        List<NavyBoard> boards = boardRepository.list();
+    public List<NavyBoardSummaryDTO> list(int offset, int limit) {
+        List<NavyBoard> boards = boardRepository.list(offset, limit);
         return boards.stream().map(board -> {
             return new NavyBoardSummaryDTO(
                     board.getId(),
@@ -40,14 +40,16 @@ public class NavyBoardService {
         return new_board.getId();
     }
     @Transactional
-    public void update(Long boardId, String title, String content) {
+    public Long update(Long boardId, String title, String content) {
         NavyBoard board = boardRepository.get(boardId);
         board.update(title, content);
+        return board.getId();
     }
     @Transactional
-    public void deactivate(Long boardId) {
+    public Long deactivate(Long boardId) {
         NavyBoard board = boardRepository.get(boardId);
         board.deactivate();
+        return board.getId();
     }
 
 }

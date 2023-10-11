@@ -20,4 +20,7 @@ public class WhiteUserRepository {
         return manager.find(WhiteUser.class, id);
     }
 
+    public WhiteUser getByEmail(String email) {
+        return manager.createQuery("select user from WhiteUser user where user.email = :email", WhiteUser.class).setParameter("email", email).getSingleResult();
+    }
 }

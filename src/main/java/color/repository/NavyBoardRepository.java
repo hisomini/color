@@ -21,8 +21,9 @@ public class NavyBoardRepository {
         return manager.find(NavyBoard.class, id);
     }
 
-    public List<NavyBoard> list() {
-        return manager.createQuery("select board from NavyBoard board", NavyBoard.class).getResultList();
+    public List<NavyBoard> list(int offset, int limit) {
+        return manager.createQuery("select board from NavyBoard board", NavyBoard.class).setFirstResult(offset)
+                .setMaxResults(limit).getResultList();
 
     }
 }
