@@ -2,6 +2,7 @@ package color.service;
 
 import color.domain.NavyBoard;
 import color.domain.WhiteUser;
+import color.dto.navyboard.NavyBoardDetailDTO;
 import color.dto.navyboard.NavyBoardSummaryDTO;
 import color.repository.NavyBoardRepository;
 import color.repository.WhiteUserRepository;
@@ -26,11 +27,21 @@ public class NavyBoardService {
                     board.getId(),
                     board.getTitle(),
                     board.getUser().getName(),
-                    board.getCreateDate(),
-                    board.getUpdateDate(),
-                    board.is_active()
+                    board.getCreateTime()
             );
         }).collect(Collectors.toList());
+    }
+
+    public NavyBoardDetailDTO get(Long id) {
+        NavyBoard board = boardRepository.get(id);
+        return new NavyBoardDetailDTO(
+                board.getId(),
+                board.getTitle(),
+                board.getContent(),
+                board.getUser().getName(),
+                board.getCreateTime(),
+                board.getUpdateTime()
+        );
     }
     @Transactional
     public Long create(Long userId, String title, String content) {

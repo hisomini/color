@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor
 public class NavyBoardController {
@@ -19,7 +19,7 @@ public class NavyBoardController {
     public List<NavyBoardSummaryDTO> list(@PathVariable int offset, int limit) {
         return boardService.list(offset, limit);
     }
-    @PostMapping
+    @PostMapping("/add")
     public Long create(@RequestBody NavyBoardCreateDTO boardCreateDTO) {
         return boardService.create(boardCreateDTO.getUserId(), boardCreateDTO.getTitle(), boardCreateDTO.getContent());
     }

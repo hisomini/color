@@ -5,24 +5,28 @@ import color.dto.yellowcompany.YellowCompanySummaryDTO;
 import color.dto.yellowcompany.YellowCompanyUpdateDTO;
 import color.service.YellowCompanyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/companies")
 @RequiredArgsConstructor
 public class YellowCompanyController {
 
     private final YellowCompanyService companyService;
 
-    @GetMapping
-    public List<YellowCompanySummaryDTO> list(@PathVariable int offset, int limit) {
+    @GetMapping()
+    public List<YellowCompanySummaryDTO> list(@RequestParam int offset, @RequestParam int limit) {
+        System.out.println(offset);
+        System.out.println(limit);
+
         return companyService.list(offset, limit);
     }
 
-    @PostMapping()
+    @PostMapping("/add")
     public Long create(@RequestBody YellowCompanyCreateDTO companyCreateDTO) {
         return companyService.create(companyCreateDTO.getName(), companyCreateDTO.getAddress(), companyCreateDTO.getRepresentativeName());
     }

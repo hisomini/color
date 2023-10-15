@@ -24,10 +24,10 @@ public class NavyBoard {
 
     private String title;
 
-    private LocalDateTime createDate;
+    private LocalDateTime createTime;
 
     @Column(nullable = true)
-    private LocalDateTime updateDate;
+    private LocalDateTime updateTime;
 
     private boolean is_active;
     //생성자
@@ -35,8 +35,8 @@ public class NavyBoard {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.createDate = LocalDateTime.now();
-        this.updateDate = null;
+        this.createTime = LocalDateTime.now();
+        this.updateTime = null;
         this.is_active = true;
     }
     //생성 메서드
