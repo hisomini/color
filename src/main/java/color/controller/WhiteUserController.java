@@ -6,8 +6,6 @@ import color.dto.whiteuser.WhiteUserLoginDTO;
 import color.dto.whiteuser.WhiteUserSignupDTO;
 import color.service.WhiteUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -27,6 +25,7 @@ public class WhiteUserController {
         WhiteUser user = userService.login(userLoginDTO);
         if (user == null) {
             response.sendError(401, "아이디 또는 비밀번호가 틀렸습니다");
+            return null;
         }
         String token = JwtTokenProvider.createToken(user.getId());
         Cookie cookie = new Cookie("jwtToken", token);
@@ -36,7 +35,7 @@ public class WhiteUserController {
     }
 
     @ResponseBody
-    @PostMapping("/signUp")
+    @PostMapping("/signup")
     public String signUp(@RequestBody WhiteUserSignupDTO signupDTO) {
         userService.signUp(signupDTO);
         return "회원가입되었습니다.";

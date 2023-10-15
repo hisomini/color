@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -32,9 +34,10 @@ public class WhiteUserService {
     }
     @Transactional
     public WhiteUser login(WhiteUserLoginDTO loginDTO) {
-        WhiteUser user = userRepository.getByEmail(loginDTO.getEmail());
-        if (passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-            return user;
+        Optional<WhiteUser> user = userRepository.getByEmail(loginDTO.getEmail());
+        if( user.isPresent() && passwordEncoder.matches(loginDTO.getPassword(), user.get().getPassword())) {
+            user.get().login();
+            return user.get();
         }
         return null;
     }
