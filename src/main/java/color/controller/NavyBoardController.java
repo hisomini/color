@@ -1,11 +1,12 @@
 package color.controller;
 
+import color.component.CustomUserDetails;
 import color.dto.navyboard.NavyBoardCreateDTO;
 import color.dto.navyboard.NavyBoardSummaryDTO;
 import color.dto.navyboard.NavyBoardUpdateDTO;
 import color.service.NavyBoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -15,8 +16,9 @@ import java.util.List;
 public class NavyBoardController {
 
     private final NavyBoardService boardService;
+
     @GetMapping
-    public List<NavyBoardSummaryDTO> list(@PathVariable int offset, int limit) {
+    public List<NavyBoardSummaryDTO> list(@AuthenticationPrincipal CustomUserDetails userDetails , @RequestParam int offset, int limit) {
         return boardService.list(offset, limit);
     }
     @PostMapping("/add")

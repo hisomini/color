@@ -7,8 +7,6 @@ import color.dto.whiteuser.WhiteUserSignupDTO;
 import color.service.WhiteUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -18,7 +16,7 @@ import java.io.IOException;
 public class WhiteUserController {
 
     private final WhiteUserService userService;
-
+    private final JwtTokenProvider jwtTokenProvider;
     @ResponseBody
     @PostMapping("/login")
     public String login(@RequestBody WhiteUserLoginDTO userLoginDTO, HttpServletResponse response) throws IOException {
@@ -27,10 +25,9 @@ public class WhiteUserController {
             response.sendError(401, "아이디 또는 비밀번호가 틀렸습니다");
             return null;
         }
-        String token = JwtTokenProvider.createToken(user.getId());
-        Cookie cookie = new Cookie("jwtToken", token);
-        cookie.setMaxAge(60 * 60);
-        response.addCookie(cookie);
+        String token = jwtTokenProvider.createToken(user.getEmail());
+        response.addHeader("Authorization", token);
+        System.out.println(token);
         return "로그인에 성공했습니다";
     }
 
