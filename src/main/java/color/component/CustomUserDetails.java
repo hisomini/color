@@ -4,7 +4,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
-
+    private Long id;
     private String email;
     private String password;
 
@@ -20,7 +20,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return null;
     }
 
     @Override
@@ -43,6 +43,17 @@ public class CustomUserDetails implements UserDetails {
         return false;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     public void setEmail(String email) {
         this.email = email;
     }
@@ -50,5 +61,4 @@ public class CustomUserDetails implements UserDetails {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

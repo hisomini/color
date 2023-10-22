@@ -7,7 +7,9 @@ import color.dto.whiteuser.WhiteUserSignupDTO;
 import color.service.WhiteUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -17,6 +19,7 @@ public class WhiteUserController {
 
     private final WhiteUserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+
     @ResponseBody
     @PostMapping("/login")
     public String login(@RequestBody WhiteUserLoginDTO userLoginDTO, HttpServletResponse response) throws IOException {
@@ -33,7 +36,10 @@ public class WhiteUserController {
 
     @ResponseBody
     @PostMapping("/signup")
-    public String signUp(@RequestBody WhiteUserSignupDTO signupDTO) {
+    public String signUp(@Valid @RequestBody WhiteUserSignupDTO signupDTO, HttpServletResponse response) throws IOException {
+        if (userService.existByEmail(signupDTO.getEmail())) {
+            response.sendError(400, "이미 존재하는 아이디 입니다.");
+        }
         userService.signUp(signupDTO);
         return "회원가입되었습니다.";
     }

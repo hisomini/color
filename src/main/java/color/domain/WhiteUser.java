@@ -12,8 +12,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class WhiteUser {
 
-    @Id @GeneratedValue
-    @Column(name="user_id")
+    @Id
+    @GeneratedValue
+    @Column(name = "user_id")
     private Long id;
 
     private String name;
@@ -32,7 +33,7 @@ public class WhiteUser {
     private LocalDateTime lastLoginDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="company_id")
+    @JoinColumn(name = "company_id")
     private YellowCompany company;
 
     private WhiteUser(String name, String email, String phone, String password, String position) {

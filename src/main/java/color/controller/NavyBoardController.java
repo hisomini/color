@@ -8,6 +8,8 @@ import color.service.NavyBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -18,19 +20,28 @@ public class NavyBoardController {
     private final NavyBoardService boardService;
 
     @GetMapping
-    public List<NavyBoardSummaryDTO> list(@AuthenticationPrincipal CustomUserDetails userDetails , @RequestParam int offset, int limit) {
+    public List<NavyBoardSummaryDTO> list(@RequestParam int offset, int limit) {
         return boardService.list(offset, limit);
     }
+
     @PostMapping("/add")
-    public Long create(@RequestBody NavyBoardCreateDTO boardCreateDTO) {
-        return boardService.create(boardCreateDTO.getUserId(), boardCreateDTO.getTitle(), boardCreateDTO.getContent());
+    public Long create(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody NavyBoardCreateDTO boardCreateDTO) {
+        return boardService.create(userDetails.getId(), boardCreateDTO.getTitle(), boardCreateDTO.getContent());
     }
+
     @PutMapping("/edit/{id}")
-    public Long update(@PathVariable Long id, NavyBoardUpdateDTO  boardUpdateDTO) {
+    public Long update(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long id, @RequestBody NavyBoardUpdateDTO boardUpdateDTO) throws AccessDeniedException {
+        if (!boardService.checkAuthority(userDetails.getId(), id)) {
+            throw new AccessDeniedException("해당 리소스에 접근권한이 없습니다");
+        }
         return boardService.update(id, boardUpdateDTO.getTitle(), boardUpdateDTO.getContent());
     }
+
     @PutMapping("/deactivate/{id}")
-    public Long deactivate(@PathVariable Long id) {
+    public Long deactivate(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long id) throws AccessDeniedException {
+        if (!boardService.checkAuthority(userDetails.getId(), id)) {
+            throw new AccessDeniedException("해당 리소스에 접근권한이 없습니다");
+        }
         return boardService.deactivate(id);
     }
 }

@@ -1,5 +1,8 @@
 package color.dto.yellowcompany;
 
+import lombok.Getter;
+
+@Getter
 public class YellowCompanySummaryDTO {
 
     private Long id;

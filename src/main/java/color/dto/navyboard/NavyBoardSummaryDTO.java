@@ -1,7 +1,11 @@
 package color.dto.navyboard;
 
+import color.domain.NavyBoard;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class NavyBoardSummaryDTO {
 
     private Long id;
@@ -9,12 +13,10 @@ public class NavyBoardSummaryDTO {
     private String userName;
     private LocalDateTime createTime;
 
-
-
-    public NavyBoardSummaryDTO(Long id, String title, String userName, LocalDateTime createTime) {
-        this.id = id;
-        this.title = title;
-        this.userName = userName;
-        this.createTime = createTime;
+    public NavyBoardSummaryDTO(NavyBoard board) {
+        this.id = board.getId();
+        this.title = board.getTitle();
+        this.userName = board.getUser().getName();
+        this.createTime = board.getCreateTime();
     }
 }

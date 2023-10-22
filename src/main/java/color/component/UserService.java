@@ -14,6 +14,7 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     private final WhiteUserRepository userRepository;
+
     @Override
     public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<WhiteUser> user = userRepository.getByEmail(email);
@@ -21,6 +22,7 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException(email);
         }
         CustomUserDetails customUserDetails = new CustomUserDetails();
+        customUserDetails.setId(user.get().getId());
         customUserDetails.setEmail(user.get().getEmail());
         customUserDetails.setPassword(user.get().getPassword());
         return customUserDetails;
