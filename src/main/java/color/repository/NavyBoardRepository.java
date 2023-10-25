@@ -22,7 +22,7 @@ public class NavyBoardRepository {
     }
 
     public List<NavyBoard> list(int offset, int limit) {
-        return manager.createQuery("select board from NavyBoard board", NavyBoard.class).setFirstResult(offset)
+        return manager.createQuery("select board from NavyBoard board where board.is_active=true", NavyBoard.class).setFirstResult(offset)
                 .setMaxResults(limit).getResultList();
 
     }

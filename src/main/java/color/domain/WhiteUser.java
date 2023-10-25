@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class WhiteUser {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -33,10 +33,10 @@ public class WhiteUser {
     private LocalDateTime lastLoginDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id", nullable = false)
     private YellowCompany company;
 
-    private WhiteUser(String name, String email, String phone, String password, String position) {
+    private WhiteUser(String name, String email, String phone, String password, String position, YellowCompany company) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -44,10 +44,11 @@ public class WhiteUser {
         this.position = position;
         this.joinDate = LocalDateTime.now();
         this.lastLoginDate = null;
+        this.company = company;
     }
 
-    public static WhiteUser createUser(String name, String email, String phone, String password, String position) {
-        return new WhiteUser(name, email, phone, password, position);
+    public static WhiteUser createUser(String name, String email, String phone, String password, String position, YellowCompany company) {
+        return new WhiteUser(name, email, phone, password, position, company);
     }
 
     public void login() {

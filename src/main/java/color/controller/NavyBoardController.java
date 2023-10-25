@@ -2,6 +2,7 @@ package color.controller;
 
 import color.component.CustomUserDetails;
 import color.dto.navyboard.NavyBoardCreateDTO;
+import color.dto.navyboard.NavyBoardDetailDTO;
 import color.dto.navyboard.NavyBoardSummaryDTO;
 import color.dto.navyboard.NavyBoardUpdateDTO;
 import color.service.NavyBoardService;
@@ -24,7 +25,12 @@ public class NavyBoardController {
         return boardService.list(offset, limit);
     }
 
-    @PostMapping("/add")
+    @GetMapping("/{id}")
+    public NavyBoardDetailDTO get(@PathVariable Long id) {
+        return boardService.get(id);
+    }
+
+    @PostMapping()
     public Long create(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody NavyBoardCreateDTO boardCreateDTO) {
         return boardService.create(userDetails.getId(), boardCreateDTO.getTitle(), boardCreateDTO.getContent());
     }
@@ -37,7 +43,7 @@ public class NavyBoardController {
         return boardService.update(id, boardUpdateDTO.getTitle(), boardUpdateDTO.getContent());
     }
 
-    @PutMapping("/deactivate/{id}")
+    @DeleteMapping("/deactivate/{id}")
     public Long deactivate(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long id) throws AccessDeniedException {
         if (!boardService.checkAuthority(userDetails.getId(), id)) {
             throw new AccessDeniedException("해당 리소스에 접근권한이 없습니다");

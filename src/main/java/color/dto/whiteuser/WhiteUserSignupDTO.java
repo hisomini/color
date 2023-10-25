@@ -17,5 +17,6 @@ public class WhiteUserSignupDTO {
     @Size(min = 8, message = "비밀번호는 8자 이상 입력해야합니다.")
     private String password;
     private String position;
-
+    @NotBlank(message = "소속회사를 선택해주세요.")
+    private Long company_id;
 }

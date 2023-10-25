@@ -10,8 +10,9 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class YellowCompany {
-    @Id @GeneratedValue
-    @Column(name="company_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "company_id")
     private Long id;
 
     private String name;

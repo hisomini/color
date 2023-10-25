@@ -28,12 +28,14 @@ public class YellowCompanyService {
             );
         }).collect(Collectors.toList());
     }
+
     @Transactional
     public Long create(String name, String address, String representativeName) {
         YellowCompany company = YellowCompany.createCompany(name, address, representativeName);
         companyRepository.save(company);
         return company.getId();
     }
+
     @Transactional
     public Long update(Long companyId, String name, String address) {
         YellowCompany company = companyRepository.get(companyId);

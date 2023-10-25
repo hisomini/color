@@ -2,6 +2,7 @@ package color.service;
 
 
 import color.domain.WhiteUser;
+import color.domain.YellowCompany;
 import color.dto.whiteuser.WhiteUserLoginDTO;
 import color.dto.whiteuser.WhiteUserSignupDTO;
 import color.repository.WhiteUserRepository;
@@ -20,15 +21,19 @@ public class WhiteUserService {
 
     private final WhiteUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final YellowCompanyRepository companyRepository;
 
     @Transactional
     public Long signUp(WhiteUserSignupDTO signupDTO) {
+        YellowCompany company = companyRepository.get(signupDTO.getCompany_id());
         WhiteUser new_user = WhiteUser.createUser(
                 signupDTO.getName(),
                 signupDTO.getEmail(),
                 signupDTO.getPhone(),
                 passwordEncoder.encode(signupDTO.getPassword()),
-                signupDTO.getPosition());
+                signupDTO.getPosition(),
+                company
+        );
         userRepository.save(new_user);
         return new_user.getId();
     }

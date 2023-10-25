@@ -13,6 +13,7 @@ public class NavyBoardDetailDTO {
     private String title;
     private String content;
     private String userName;
+    private String company;
     private LocalDateTime createTime;
     @Nullable
     private LocalDateTime updateTime;
@@ -24,6 +25,6 @@ public class NavyBoardDetailDTO {
         this.userName = board.getUser().getName();
         this.createTime = board.getCreateTime();
         this.updateTime = board.getUpdateTime();
-
+        this.company = board.getUser().getCompany().getName();
     }
 }
