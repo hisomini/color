@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/users")
@@ -22,12 +21,8 @@ public class WhiteUserController {
 
     @ResponseBody
     @PostMapping("/login")
-    public String login(@RequestBody WhiteUserLoginDTO userLoginDTO, HttpServletResponse response) throws IOException {
+    public String login(@RequestBody WhiteUserLoginDTO userLoginDTO, HttpServletResponse response) {
         WhiteUser user = userService.login(userLoginDTO);
-        if (user == null) {
-            response.sendError(401, "아이디 또는 비밀번호가 틀렸습니다");
-            return null;
-        }
         String token = jwtTokenProvider.createToken(user.getEmail());
         response.addHeader("Authorization", token);
         System.out.println(token);

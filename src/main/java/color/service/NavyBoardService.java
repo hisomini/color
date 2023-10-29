@@ -1,18 +1,19 @@
 package color.service;
 
-import color.component.CustomUserDetails;
 import color.domain.NavyBoard;
 import color.domain.WhiteUser;
 import color.dto.navyboard.NavyBoardDetailDTO;
 import color.dto.navyboard.NavyBoardSummaryDTO;
 import color.repository.NavyBoardRepository;
 import color.repository.WhiteUserRepository;
+import color.service.exception.error.BusinessException;
+import color.service.exception.error.ErrorMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,13 +30,19 @@ public class NavyBoardService {
     }
 
     public NavyBoardDetailDTO get(Long id) {
-        NavyBoard board = boardRepository.get(id);
-        return new NavyBoardDetailDTO(board);
+        Optional<NavyBoard> board = boardRepository.get(id);
+        if (board.isEmpty()) {
+            throw new BusinessException(ErrorMessage.BOARD_NOT_FOUND_ERROR);
+        }
+        return new NavyBoardDetailDTO(board.get());
     }
 
     public boolean checkAuthority(Long userId, Long domainId) {
-        NavyBoard board = boardRepository.get(domainId);
-        if (board.getUser().getId().equals(userId)) {
+        Optional<NavyBoard> board = boardRepository.get(domainId);
+        if (board.isEmpty()) {
+            throw new BusinessException(ErrorMessage.BOARD_NOT_FOUND_ERROR);
+        }
+        if (board.get().getUser().getId().equals(userId)) {
             return true;
         }
         return false;
@@ -51,16 +58,22 @@ public class NavyBoardService {
 
     @Transactional
     public Long update(Long boardId, String title, String content) {
-        NavyBoard board = boardRepository.get(boardId);
-        board.update(title, content);
-        return board.getId();
+        Optional<NavyBoard> board = boardRepository.get(boardId);
+        if (board.isEmpty()) {
+            throw new BusinessException(ErrorMessage.BOARD_NOT_FOUND_ERROR);
+        }
+        board.get().update(title, content);
+        return board.get().getId();
     }
 
     @Transactional
     public Long deactivate(Long boardId) {
-        NavyBoard board = boardRepository.get(boardId);
-        board.deactivate();
-        return board.getId();
+        Optional<NavyBoard> board = boardRepository.get(boardId);
+        if (board.isEmpty()) {
+            throw new BusinessException(ErrorMessage.BOARD_NOT_FOUND_ERROR);
+        }
+        board.get().deactivate();
+        return board.get().getId();
     }
 
 }

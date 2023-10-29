@@ -3,11 +3,12 @@ package color.service;
 import color.domain.YellowCompany;
 import color.dto.yellowcompany.YellowCompanySummaryDTO;
 import color.repository.YellowCompanyRepository;
+import color.service.exception.error.BusinessException;
+import color.service.exception.error.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,7 +43,7 @@ public class YellowCompanyService {
     public Long update(Long companyId, String name, String address) {
         Optional<YellowCompany> company = companyRepository.get(companyId);
         if (company.isEmpty()) {
-            throw new EntityNotFoundException(String.format("업체가 존재하지 않습니다 ID : %s", companyId));
+            throw new BusinessException(ErrorMessage.COMPANY_NOT_FOUND_ERROR);
         }
         company.get().update(name, address);
         return company.get().getId();
@@ -52,7 +53,7 @@ public class YellowCompanyService {
     public Long deactivate(Long companyId) {
         Optional<YellowCompany> company = companyRepository.get(companyId);
         if (company.isEmpty()) {
-            throw new EntityNotFoundException(String.format("업체가 존재하지 않습니다 ID : %s", companyId));
+            throw new BusinessException(ErrorMessage.COMPANY_NOT_FOUND_ERROR);
         }
         company.get().deactivate();
         return company.get().getId();

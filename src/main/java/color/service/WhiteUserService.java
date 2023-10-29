@@ -51,16 +51,13 @@ public class WhiteUserService {
     @Transactional
     public WhiteUser login(WhiteUserLoginDTO loginDTO) {
         Optional<WhiteUser> user = userRepository.getByEmail(loginDTO.getEmail());
-        if (!user.isEmpty() && passwordEncoder.matches(loginDTO.getPassword(), user.get().getPassword())) {
-            user.get().login();
-            return user.get();
+        if (user.isEmpty()) {
+            throw new BusinessException(ErrorMessage.USER_NOT_FOUND_ERROR);
         }
-        return null;
-    }
-
-    public boolean existByEmail(String email) {
-
-
-        return false;
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.get().getPassword())) {
+            throw new BusinessException(ErrorMessage.USER_INFO_NOT_CORRECT);
+        }
+        user.get().login();
+        return user.get();
     }
 }
