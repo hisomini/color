@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -18,8 +19,9 @@ public class YellowCompanyRepository {
         manager.persist(company);
     }
 
-    public YellowCompany get(Long id) {
-        return manager.find(YellowCompany.class, id);
+    public Optional<YellowCompany> get(Long id) {
+        List<YellowCompany> companies = manager.createQuery("select company from YellowCompany company where company.id = :id").setParameter("id", id).getResultList();
+        return companies.stream().findAny();
     }
 
     public List<YellowCompany> list(int offset, int limit) {

@@ -18,5 +18,5 @@ public class WhiteUserSignupDTO {
     private String password;
     private String position;
     @NotBlank(message = "소속회사를 선택해주세요.")
-    private Long company_id;
+    private String companyId;
 }

@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,15 +40,21 @@ public class YellowCompanyService {
 
     @Transactional
     public Long update(Long companyId, String name, String address) {
-        YellowCompany company = companyRepository.get(companyId);
-        company.update(name, address);
-        return company.getId();
+        Optional<YellowCompany> company = companyRepository.get(companyId);
+        if (company.isEmpty()) {
+            throw new EntityNotFoundException(String.format("업체가 존재하지 않습니다 ID : %s", companyId));
+        }
+        company.get().update(name, address);
+        return company.get().getId();
     }
 
     @Transactional
     public Long deactivate(Long companyId) {
-        YellowCompany company = companyRepository.get(companyId);
-        company.deactivate();
-        return company.getId();
+        Optional<YellowCompany> company = companyRepository.get(companyId);
+        if (company.isEmpty()) {
+            throw new EntityNotFoundException(String.format("업체가 존재하지 않습니다 ID : %s", companyId));
+        }
+        company.get().deactivate();
+        return company.get().getId();
     }
 }

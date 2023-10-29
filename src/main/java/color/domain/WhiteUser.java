@@ -32,8 +32,8 @@ public class WhiteUser {
     @Column(nullable = true)
     private LocalDateTime lastLoginDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "company_id")
     private YellowCompany company;
 
     private WhiteUser(String name, String email, String phone, String password, String position, YellowCompany company) {

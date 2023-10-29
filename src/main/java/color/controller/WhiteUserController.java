@@ -36,10 +36,7 @@ public class WhiteUserController {
 
     @ResponseBody
     @PostMapping("/signup")
-    public String signUp(@Valid @RequestBody WhiteUserSignupDTO signupDTO, HttpServletResponse response) throws IOException {
-        if (userService.existByEmail(signupDTO.getEmail())) {
-            response.sendError(400, "이미 존재하는 아이디 입니다.");
-        }
+    public String signUp(@Valid @RequestBody WhiteUserSignupDTO signupDTO) {
         userService.signUp(signupDTO);
         return "회원가입되었습니다.";
     }
